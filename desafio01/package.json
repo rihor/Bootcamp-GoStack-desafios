@@ -1,0 +1,17 @@
+{
+  "name": "bootcamp-gostack-desafio-01",
+  "version": "1.0.0",
+  "main": "src",
+  "author": "Pedro Pinho <rihor1000@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src",
+    "dev": "nodemon src"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
