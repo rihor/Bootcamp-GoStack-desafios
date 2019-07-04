@@ -19,6 +19,7 @@ routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 
 routes.post('/meetup', MeetupController.store);
+routes.put('/meetup/:id', MeetupController.update);
 
 // rota de upload de imagem
 routes.post('/files', upload.single('file'), FileController.store);
