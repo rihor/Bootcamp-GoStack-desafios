@@ -1,11 +1,11 @@
-import Sequelize, { Model } from 'sequelize';
 import { isBefore } from 'date-fns';
+import Sequelize, { Model } from 'sequelize';
 
 class Meetup extends Model {
   static init(sequelize) {
     super.init(
       {
-        tile: Sequelize.STRING,
+        title: Sequelize.STRING,
         description: Sequelize.STRING,
         location: Sequelize.STRING,
         date: Sequelize.DATE,
