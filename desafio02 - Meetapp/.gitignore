@@ -1,3 +1,6 @@
 node_modules
 
 tmp/uploads/*
+
+#ignora as variáveis de ambiente
+.env
