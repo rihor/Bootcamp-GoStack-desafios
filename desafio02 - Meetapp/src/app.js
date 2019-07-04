@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { resolve } from 'path';
 
 import routes from './routes';
 import './database';
@@ -15,6 +16,11 @@ class App {
   middlewares() {
     // permite uso de json nas rotas
     this.server.use(express.json());
+    // servir arquivos estáticos
+    this.server.use(
+      '/files',
+      express.static(resolve(__dirname, '..', 'tmp', 'uploads'))
+    );
   }
 
   routes() {
