@@ -1,3 +1,4 @@
+require('dotenv/config');
 /**
  * configuração de comunicação com o banco de dados
  */
