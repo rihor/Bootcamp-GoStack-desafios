@@ -16,6 +16,7 @@ class App {
   middlewares() {
     // permite uso de json nas rotas
     this.server.use(express.json());
+    this.server.use(express.urlencoded({ extended: false }));
     // servir arquivos estáticos
     this.server.use(
       '/files',

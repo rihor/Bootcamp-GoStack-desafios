@@ -6,6 +6,7 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
 import MeetupController from './app/controllers/MeetupController';
+import SubscriptionController from './app/controllers/SubscriptionController';
 import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
@@ -14,12 +15,17 @@ const upload = multer(multerConfig);
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 
+// apartir daqui todos as rotas precisam de autenticação
 routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
 
+routes.get('/meetup', MeetupController.index);
 routes.post('/meetup', MeetupController.store);
-routes.put('/meetup/:id', MeetupController.update);
+routes.put('/meetup/:meetupId', MeetupController.update);
+routes.delete('/meetup/:meetupId', MeetupController.delete);
+
+routes.post('/meetup/:meetupId/subscribe', SubscriptionController.store);
 
 // rota de upload de imagem
 routes.post('/files', upload.single('file'), FileController.store);
