@@ -110,6 +110,10 @@ class MeetupController {
     // acha a meetup correspondente ao id passado
     const meetup = await Meetup.findByPk(meetupId);
 
+    if (!meetup) {
+      return res.status(400).json({ error: "This meetup doesn't exist" });
+    }
+
     // checa se quem está deletando possui a meetup
     if (meetup.user_id !== req.userId) {
       return res
