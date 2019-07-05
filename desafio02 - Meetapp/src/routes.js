@@ -28,6 +28,7 @@ routes.delete('/meetup/:meetupId', MeetupController.delete);
 
 routes.get('/organizing', OrganizingController.index);
 
+routes.get('/subscriptions', SubscriptionController.index);
 routes.post('/meetup/:meetupId/subscribe', SubscriptionController.store);
 
 // rota de upload de imagem
