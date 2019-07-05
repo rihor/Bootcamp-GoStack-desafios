@@ -1,12 +1,32 @@
 import * as Yup from 'yup';
-import { isBefore, parseISO } from 'date-fns';
+import { isBefore, parseISO, startOfDay, endOfDay } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Meetup from '../models/Meetup';
 import User from '../models/User';
+import File from '../models/File';
 
 class MeetupController {
   async index(req, res) {
-    return res.json();
+    const page = req.query.page || 1;
+    const where = {};
+
+    if (req.query.date) {
+      const parsedDate = parseISO(req.query.date);
+
+      where.date = {
+        [Op.between]: [startOfDay(parsedDate), endOfDay(parsedDate)],
+      };
+    }
+
+    const meetups = await Meetup.findAll({
+      where,
+      include: [User],
+      limit: 10,
+      offset: 10 * page - 10,
+    });
+
+    return res.json(meetups);
   }
 
   async store(req, res) {
@@ -34,6 +54,7 @@ class MeetupController {
   }
 
   async update(req, res) {
+    const { meetupId } = req.params;
     // schema de validação
     const schema = Yup.object().shape({
       title: Yup.string(),
@@ -47,9 +68,22 @@ class MeetupController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
-
     // achar a meetup de acordo com o id passado nos parametros
-    const meetup = await Meetup.findByPk(req.params.id);
+    const meetup = await Meetup.findByPk(meetupId);
+
+    // checa se achou algum meetup
+    if (meetup === null) {
+      return res.status(400).json({ error: 'Meetup not found' });
+    }
+
+    // checa se o banner existe no banco
+    const banner = await File.findByPk(req.body.banner_id);
+
+    // caso o banner não exista retorna o erro
+    if (banner === null) {
+      return res.status(400).json({ error: 'This banner does not exist' });
+    }
+
     // checar esse é o dono da meetup
     if (meetup.user_id !== req.userId) {
       return res.status(401).json({ error: 'Not authorized.' });
@@ -66,6 +100,29 @@ class MeetupController {
     }
 
     await meetup.update(req.body);
+
+    return res.json(meetup);
+  }
+
+  async delete(req, res) {
+    const { meetupId } = req.params;
+
+    // acha a meetup correspondente ao id passado
+    const meetup = await Meetup.findByPk(meetupId);
+
+    // checa se quem está deletando possui a meetup
+    if (meetup.user_id !== req.userId) {
+      return res
+        .status(401)
+        .json({ error: 'You can only delete your own meetup' });
+    }
+
+    // checa se a meetup já passou
+    if (meetup.past) {
+      return res.status(400).json({ error: "You can't delete past meetups" });
+    }
+
+    await meetup.destroy();
 
     return res.json(meetup);
   }
