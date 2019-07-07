@@ -1,7 +1,7 @@
 {
   "name": "desafio04-introducao-ao-react",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src",
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
