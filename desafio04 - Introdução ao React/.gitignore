@@ -1,1 +1,5 @@
+# dependências
 node_modules
+
+# build gerada
+public/bundle.js
