@@ -122,3 +122,26 @@ export const IssueFilter = styled.div`
     }
   }
 `;
+
+export const PaginationButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+`;
+
+export const PageButton = styled.button.attrs(props => ({
+  type: 'button',
+  disabled: !props.show,
+}))`
+  margin-bottom: 30px;
+  background: #7159c1;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+`;
