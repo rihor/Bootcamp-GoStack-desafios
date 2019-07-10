@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList } from './styles';
+import { Loading, Owner, IssueList, IssueFilter } from './styles';
 
 export default class Repository extends Component {
   static propTypes = {
@@ -19,10 +19,17 @@ export default class Repository extends Component {
     repository: {},
     issues: [],
     loading: true,
+    filters: [
+      { state: 'all', label: 'Todas' },
+      { state: 'open', label: 'Abertas' },
+      { state: 'closed', label: 'Fechadas' },
+    ],
+    filterIndex: 0,
   };
 
   async componentDidMount() {
     const { match } = this.props;
+    const { filters, filterIndex } = this.state;
     const repoName = decodeURIComponent(match.params.repository);
 
     // executa duas requisições ao mesmo tempo
@@ -30,7 +37,7 @@ export default class Repository extends Component {
       api.get(`/repos/${repoName}`),
       api.get(`/repos/${repoName}/issues`, {
         params: {
-          state: 'open',
+          state: filters[filterIndex].state,
           per_page: 5,
         },
       }),
@@ -43,8 +50,31 @@ export default class Repository extends Component {
     });
   }
 
+  loadIssues = async () => {
+    const { match } = this.props;
+    const { filters, filterIndex } = this.state;
+    const repoName = decodeURIComponent(match.params.repository);
+
+    // executa duas requisições ao mesmo tempo
+    const issues = await api.get(`/repos/${repoName}/issues`, {
+      params: {
+        state: filters[filterIndex].state,
+        per_page: 5,
+      },
+    });
+
+    this.setState({
+      issues: issues.data,
+    });
+  };
+
+  handleFilterClick = async filterIndex => {
+    await this.setState({ filterIndex });
+    this.loadIssues();
+  };
+
   render() {
-    const { repository, issues, loading } = this.state;
+    const { repository, issues, loading, filters, filterIndex } = this.state;
 
     // caso esteja carregando ainda
     if (loading) {
@@ -59,6 +89,18 @@ export default class Repository extends Component {
           <h1>{repository.name}</h1>
           <p>{repository.description}</p>
         </Owner>
+
+        <IssueFilter selected={filterIndex}>
+          {filters.map((filter, index) => (
+            <button
+              type="button"
+              key={filter.label}
+              onClick={() => this.handleFilterClick(index)}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </IssueFilter>
 
         <IssueList>
           {issues.map(issue => (
