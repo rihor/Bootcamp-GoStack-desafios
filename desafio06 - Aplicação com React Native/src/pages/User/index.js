@@ -31,6 +31,7 @@ export default class User extends Component {
   state = {
     stars: [],
     page: 1,
+    refreshing: false,
   };
 
   // preenche o array stars
@@ -47,6 +48,7 @@ export default class User extends Component {
     await this.setState({
       stars: page >= 2 ? [...stars, ...response.data] : response.data,
       page,
+      refreshing: false,
     });
   };
 
@@ -56,9 +58,14 @@ export default class User extends Component {
     await this.load(page + 1);
   };
 
+  refreshList = async () => {
+    this.setState({ refreshing: true });
+    await this.load();
+  };
+
   render() {
     const { navigation } = this.props;
-    const { stars } = this.state;
+    const { stars, refreshing } = this.state;
     const user = navigation.getParam('user');
     return (
       <Container>
@@ -75,6 +82,8 @@ export default class User extends Component {
             keyExtractor={star => String(star.id)}
             onEndReachedThreshold={0.2}
             onEndReached={this.changePage}
+            onRefresh={this.refreshList}
+            refreshing={refreshing}
             renderItem={({ item }) => (
               <Starred>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
