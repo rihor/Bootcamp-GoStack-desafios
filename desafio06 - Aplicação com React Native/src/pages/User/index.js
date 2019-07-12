@@ -30,15 +30,31 @@ export default class User extends Component {
 
   state = {
     stars: [],
+    page: 1,
   };
 
   // preenche o array stars
   async componentDidMount() {
+    await this.load();
+  }
+
+  load = async (page = 1) => {
+    const { stars } = this.state;
     const { navigation } = this.props;
     const user = navigation.getParam('user');
-    const response = await api.get(`/users/${user.login}/starred`);
-    this.setState({ stars: response.data });
-  }
+    const response = await api.get(`users/${user.login}/starred?page=${page}`);
+
+    await this.setState({
+      stars: page >= 2 ? [...stars, ...response.data] : response.data,
+      page,
+    });
+  };
+
+  changePage = async () => {
+    const { page } = this.state;
+
+    await this.load(page + 1);
+  };
 
   render() {
     const { navigation } = this.props;
@@ -57,6 +73,8 @@ export default class User extends Component {
           <Stars
             data={stars}
             keyExtractor={star => String(star.id)}
+            onEndReachedThreshold={0.2}
+            onEndReached={this.changePage}
             renderItem={({ item }) => (
               <Starred>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
