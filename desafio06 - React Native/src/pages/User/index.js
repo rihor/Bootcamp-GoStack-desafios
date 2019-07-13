@@ -67,6 +67,7 @@ export default class User extends Component {
   handleNavigate = repository => {
     const { navigation } = this.props;
 
+    console.tron.log(repository);
     navigation.navigate('Repository', { repository });
   };
 
