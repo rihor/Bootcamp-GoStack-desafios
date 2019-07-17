@@ -1,10 +1,14 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { Fragment } from 'react';
+import { StatusBar } from 'react-native';
+
+import color from './theme/color';
+import Routes from './routes';
 
 const App = () => (
-  <View>
-    <Text>Teste versão 0.60</Text>
-  </View>
+  <Fragment>
+    <StatusBar barStyle="light-content" backgroundColor={color.dark} />
+    <Routes />
+  </Fragment>
 );
 
 export default App;
