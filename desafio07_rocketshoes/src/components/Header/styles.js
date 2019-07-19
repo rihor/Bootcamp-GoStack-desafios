@@ -3,11 +3,15 @@ import styled from 'styled-components/native';
 import logo from '../../assets/logo.png';
 import color from '../../theme/color';
 
-export const Container = styled.View`
+export const Container = styled.View.attrs({
+  elevation: 2,
+})`
   flex-direction: row;
-  flex: 1;
   justify-content: space-between;
-  padding: 20px;
+  align-items: center;
+  padding: 0 20px;
+  background-color: ${color.dark};
+  height: 80px;
 `;
 
 export const Logo = styled.Image.attrs({
@@ -18,24 +22,19 @@ export const Logo = styled.Image.attrs({
 `;
 
 export const CartContainer = styled.TouchableOpacity`
-  height: 24px;
-  width: 24px;
-  align-items: flex-end;
-  justify-content: flex-end;
-  margin-top: 2px;
+  position: relative;
 `;
 
 export const ItemCount = styled.Text`
   position: absolute;
-  text-align: center;
-  top: -8px;
-  right: -8px;
-  min-width: 18px;
-  min-height: 18px;
-  background: ${color.primary};
-  color: #fff;
-  font-size: 12px;
-  padding: 2px;
+  width: 18px;
+  height: 18px;
   border-radius: 9px;
-  overflow: hidden;
+  right: -6px;
+  top: -6px;
+  font-size: 10px;
+  line-height: 18px;
+  text-align: center;
+  color: #fff;
+  background: ${color.primary};
 `;

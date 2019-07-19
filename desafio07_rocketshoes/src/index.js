@@ -1,14 +1,16 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
 import { StatusBar } from 'react-native';
 
 import color from './theme/color';
 import Routes from './routes';
+import store from './store';
 
 const App = () => (
-  <Fragment>
+  <Provider store={store}>
     <StatusBar barStyle="light-content" backgroundColor={color.dark} />
     <Routes />
-  </Fragment>
+  </Provider>
 );
 
 export default App;
