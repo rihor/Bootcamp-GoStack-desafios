@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import { resolve } from 'path';
+import cors from 'cors';
 import Youch from 'youch';
 import * as Sentry from '@sentry/node';
 import 'express-async-errors';
@@ -24,6 +25,7 @@ class App {
     this.server.use(Sentry.Handlers.requestHandler());
     // permite uso de json nas rotas
     this.server.use(express.json());
+    this.server.use(cors());
     this.server.use(express.urlencoded({ extended: false }));
     // servir arquivos estáticos
     this.server.use(
