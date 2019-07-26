@@ -22,6 +22,7 @@ routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 
 routes.get('/meetup', MeetupController.index);
+routes.get('/meetup/:meetupId', MeetupController.find);
 routes.post('/meetup', MeetupController.store);
 routes.put('/meetup/:meetupId', MeetupController.update);
 routes.delete('/meetup/:meetupId', MeetupController.delete);

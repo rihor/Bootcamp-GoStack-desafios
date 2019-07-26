@@ -29,6 +29,27 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  async find(req, res) {
+    const { meetupId } = req.params;
+    // schema de validação
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+    // checagem pela schema
+    if (!schema.isValid(req.params)) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const meetup = await Meetup.findByPk(meetupId);
+
+    // checa se achou algum meetup
+    if (meetup === null) {
+      return res.status(400).json({ error: 'Meetup not found' });
+    }
+
+    return res.json(meetup);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       title: Yup.string().required(),
