@@ -29,7 +29,7 @@ export const Profile = styled.div`
 
   div {
     text-align: right;
-    margin-right: 10px;
+    margin-right: 20px;
     strong {
       display: block;
       color: #fff;
@@ -45,8 +45,13 @@ export const Profile = styled.div`
 
 export const SignOutButton = styled.button`
   background: #d44059;
-  padding: 5px 15px;
+  padding: 10px 20px;
   border: 0;
   border-radius: 4px;
   color: #fff;
+  transition: box-shadow 0.1s;
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(212, 64, 89, 0.8);
+  }
 `;
