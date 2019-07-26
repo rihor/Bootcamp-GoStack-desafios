@@ -40,7 +40,15 @@ class MeetupController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const meetup = await Meetup.findByPk(meetupId);
+    const meetup = await Meetup.findByPk(meetupId, {
+      include: [
+        {
+          model: File,
+          as: 'banner',
+          attributes: ['name', 'id', 'path', 'url'],
+        },
+      ],
+    });
 
     // checa se achou algum meetup
     if (meetup === null) {
