@@ -66,6 +66,7 @@ export const Meetup = styled.li`
       display: flex;
       flex: 1;
       justify-content: space-between;
+      align-items: center;
       time {
         color: #999;
       }
