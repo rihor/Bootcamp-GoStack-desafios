@@ -10,11 +10,19 @@ import { Container, Header, Loading, Meetup } from './styles';
 export default function Dashboard() {
   const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function loadMeetups() {
       setLoading(true);
-      const response = await api.get('organizing');
+      setError(false);
+      const response = await api.get('organizing').catch(() => {
+        setLoading(false);
+        setError(true);
+      });
+      if (!response) {
+        return;
+      }
       const data = response.data.map(meetup => ({
         ...meetup,
         formattedDate: format(
@@ -28,6 +36,7 @@ export default function Dashboard() {
       console.tron.log(data);
       setMeetups(data);
       setLoading(false);
+      setError(false);
     }
     loadMeetups();
   }, []);
@@ -43,8 +52,10 @@ export default function Dashboard() {
           </button>
         </Link>
       </Header>
-      {loading ? (
-        <Loading>Carregando...</Loading>
+      {loading || error ? (
+        <Loading>
+          {loading ? 'Carregando...' : 'Ocorreu um erro inesperado.'}
+        </Loading>
       ) : (
         <ul>
           {meetups.map(meetup => (
