@@ -30,6 +30,9 @@ export const Header = styled.header`
     font-weight: bold;
     display: flex;
     align-items: center;
+    &:hover {
+      box-shadow: 0 0 8px rgba(212, 64, 89, 0.8);
+    }
 
     svg {
       margin-right: 10px;
