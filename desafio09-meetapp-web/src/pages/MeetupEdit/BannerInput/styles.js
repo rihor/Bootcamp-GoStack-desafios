@@ -34,7 +34,7 @@ export const Container = styled.div`
       height: 100%;
       width: 100%;
       border-radius: 4px;
-      z-index: 2;
+      z-index: 1;
     }
 
     /* não mostrar o verdadeiro input */

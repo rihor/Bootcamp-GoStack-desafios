@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { darken, lighten } from 'polished';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   max-width: 900px;
@@ -9,6 +9,17 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0 20px;
+
+    /* estilizando o react-datepicker */
+    .react-datepicker-wrapper {
+      margin: 10px 0;
+    }
+
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      width: 100%;
+    }
 
     input,
     textarea {
@@ -48,7 +59,7 @@ export const Container = styled.div`
       }
     }
 
-    button {
+    > button {
       align-self: flex-end;
       display: flex;
       align-items: center;

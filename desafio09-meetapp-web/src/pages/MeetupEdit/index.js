@@ -14,11 +14,15 @@ import DatePickerInput from './DatePickerInput';
 
 export default function MeetupEdit({ match }) {
   const schema = Yup.object().shape({
+    banner_id: Yup.number().required('O banner é necessário'),
     title: Yup.string('Insira um título válido').required(
       'O título é necessário'
     ),
     description: Yup.string('Insira uma descrição válida').required(
       'A descrição é necessária'
+    ),
+    date: Yup.date('Insira uma data válida').required(
+      'A data do meetup é necessária'
     ),
     location: Yup.string('Insira uma localidade válida').required(
       'A localidade é necessária'
@@ -33,14 +37,13 @@ export default function MeetupEdit({ match }) {
   useEffect(() => {
     async function loadMeetup() {
       try {
-        const response = await api.get(`meetup/${id}`);
+        const { data } = await api.get(`meetup/${id}`);
         const meetupFormatted = {
-          ...response.data,
-          date: parseISO(response.data.date),
-          past: isBefore(parseISO(response.data.date), new Date()),
+          ...data,
+          date: parseISO(data.date),
+          past: isBefore(parseISO(data.date), new Date()),
         };
         setMeetup(meetupFormatted);
-        console.tron.log(meetupFormatted);
       } catch (error) {
         toast.error('Ocorreu um erro interno.');
       }
@@ -51,7 +54,13 @@ export default function MeetupEdit({ match }) {
     }
   }, [createNew, id]);
 
-  async function handleSubmit({ title, description, location, banner_id }) {
+  async function handleSubmit({
+    title,
+    description,
+    location,
+    banner_id,
+    date,
+  }) {
     let meetupId;
     try {
       if (createNew) {
@@ -60,6 +69,7 @@ export default function MeetupEdit({ match }) {
           description,
           location,
           banner_id,
+          date,
         });
         meetupId = data.id;
         toast.success('Meetup criado com sucesso!');
@@ -69,6 +79,7 @@ export default function MeetupEdit({ match }) {
           description,
           location,
           banner_id,
+          date,
         });
         meetupId = data.id;
         toast.success('Meetup atualizado com sucesso!');
@@ -94,7 +105,7 @@ export default function MeetupEdit({ match }) {
           placeholder="Descrição completa"
           value={meetup.description}
         />
-        <DatePickerInput name="date" placeholder="Data" />
+        <DatePickerInput name="date" placeholder="A data e hora do meetup" />
 
         <Input name="location" placeholder="Localização" />
         <button type="submit">
