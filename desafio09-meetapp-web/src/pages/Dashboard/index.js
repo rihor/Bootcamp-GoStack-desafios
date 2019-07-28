@@ -27,13 +27,12 @@ export default function Dashboard() {
         ...meetup,
         formattedDate: format(
           parseISO(meetup.date),
-          "d 'de' MMMM', às' HH'h'",
+          "d 'de' MMMM', às' HH'h' mm'min'",
           {
             locale: pt,
           }
         ),
       }));
-      console.tron.log(data);
       setMeetups(data);
       setLoading(false);
       setError(false);

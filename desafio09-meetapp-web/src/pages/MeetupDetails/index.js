@@ -35,7 +35,7 @@ export default function MeetupDetails({ match }) {
         ...response.data,
         formattedDate: format(
           parseISO(response.data.date),
-          "d 'de' MMMM', às' HH'h'",
+          "d 'de' MMMM', às' HH'h' mm'min'",
           {
             locale: pt,
           }
