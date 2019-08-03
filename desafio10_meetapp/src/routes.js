@@ -18,13 +18,15 @@ export default (isSigned = false) =>
         App: createBottomTabNavigator(
           { Dashboard, Registrations, Profile },
           {
-            swipeEnabled: true,
             tabBarOptions: {
               keyboardHidesTabBar: true,
+              allowFontScaling: true,
               activeTintColor: '#fff',
               inactiveTintColor: 'rgba(255, 255, 255, 0.6)',
               style: {
                 backgroundColor: '#2B1A2F',
+                padding: 10,
+                height: 70,
               },
             },
           }
