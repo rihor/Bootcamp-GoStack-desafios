@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import api from '~/services/api';
 import { updateProfileSuccess, updateProfileFailure } from './actions';
 
+// pode receber um objeto {name, email, oldPassword, password, confirmPassword}
 export function* updateProfile({ payload }) {
   try {
     const { name, email, ...rest } = payload.data;
