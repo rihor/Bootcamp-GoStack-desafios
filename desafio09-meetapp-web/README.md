@@ -16,9 +16,17 @@ O layout do projeto está anexado nesse repositório.
 
 O usuário deve poder se autenticar utilizando e-mail e senha.
 
+<img src="_readme-assets/login.png" />
+
+---
+
 ### Cadastro
 
 O usuário deve poder se cadastrar com nome, e-mail e senha.
+
+<img src="_readme-assets/cadastro.png" />
+
+---
 
 ### Dashboard
 
@@ -26,11 +34,19 @@ O usuário deve poder listar os meetups que organiza e clicar para ver detalhes 
 
 Nessa tela o usuário pode navegar para a página de criação de meetup.
 
+<img src="_readme-assets/dashboard.png" />
+
+---
+
 ### Detalhes
 
 O usuário deve poder visualizar detalhes de um meetup previamente cadastrado.
 
 Nessa tela o usuário pode editar os dados de um meetup ou até cancelar um meetup.
+
+<img src="_readme-assets/detalhes.png" />
+
+---
 
 ### Novo/editar
 
@@ -40,11 +56,19 @@ Exiba a preview de imagem de banner do meetup quando o usuário selecionar uma i
 
 Utilize validação nos campos.
 
+<img src="_readme-assets/novo-editar.png" />
+
+---
+
 ### Perfil
 
 O usuário deve poder editar suas informações de cadastro.
 
 Utilize validação nos campos.
+
+<img src="_readme-assets/perfil.png" />
+
+---
 
 ## Entrega
 
