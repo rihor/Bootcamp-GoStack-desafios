@@ -16,6 +16,7 @@ export function* signIn({ payload }) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
     yield put(signInSuccess(token, user));
+    Alert.alert('Sucesso', 'Login efetuado');
   } catch (err) {
     Alert.alert(
       'Falha na autenticação',
@@ -33,6 +34,7 @@ export function* signUp({ payload }) {
       email,
       password,
     });
+    Alert.alert('Sucesso', 'Cadastro efetuado');
   } catch (err) {
     Alert.alert('Falha no cadastro', 'Por favor verifique seus dados.');
     yield put(signFailure());

@@ -12,9 +12,9 @@ export function* updateProfile({ payload }) {
       rest.oldPassword ? rest : {}
     );
     const response = yield call(api.put, 'users', profile);
-    Alert.alert('Perfil atualizado', 'Seu perfil foi atualizado com sucesso!');
 
     yield put(updateProfileSuccess(response.data));
+    Alert.alert('Perfil atualizado', 'Seu perfil foi atualizado com sucesso!');
   } catch (err) {
     Alert.alert('Erro', 'Ocorreu um erro interno.');
     yield put(updateProfileFailure());
