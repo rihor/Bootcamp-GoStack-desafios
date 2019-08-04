@@ -13,6 +13,7 @@ class SubscriptionController {
       where: {
         user_id: req.userId,
       },
+      attributes: ['id', 'user_id', 'meetup_id'],
       include: [
         {
           model: Meetup,
@@ -31,7 +32,7 @@ class SubscriptionController {
             {
               model: File,
               as: 'banner',
-              attributes: ['id', 'path', 'url'],
+              attributes: ['path', 'url'],
             },
           ],
         },
