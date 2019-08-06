@@ -31,6 +31,7 @@ routes.get('/organizing', OrganizingController.index);
 
 routes.get('/subscriptions', SubscriptionController.index);
 routes.post('/meetup/:meetupId/subscribe', SubscriptionController.store);
+routes.delete('/meetup/:meetupId/unsubscribe', SubscriptionController.delete);
 
 // rota de upload de imagem
 routes.post('/files', upload.single('file'), FileController.store);

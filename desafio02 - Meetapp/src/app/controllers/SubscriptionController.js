@@ -72,6 +72,16 @@ class SubscriptionController {
       ],
     });
 
+    // checa se o meetup que está tentando se inscrever é o mesmo meetup que foi achado
+    if (
+      checkIfDateIsTaken &&
+      String(checkIfDateIsTaken.meetup_id) === meetupId
+    ) {
+      return res
+        .status(400)
+        .json({ error: 'You are already subscribed to this meetup' });
+    }
+
     // checa se o usuário já tem uma meetup marcada para esse horário
     if (checkIfDateIsTaken) {
       return res.status(400).json({
@@ -91,6 +101,30 @@ class SubscriptionController {
     });
 
     return res.json(subscription);
+  }
+
+  async delete(req, res) {
+    const { meetupId } = req.params;
+
+    // pega o usuário que está acessando essa rota
+    const user = await User.findByPk(req.userId);
+
+    const meetup = await Meetup.findByPk(meetupId, { include: [User] });
+
+    // checa se o meetup já aconteceu
+    if (meetup.past) {
+      return res
+        .status(400)
+        .json({ error: "You can't unsubscribe to past meetups" });
+    }
+
+    const subscription = await Subscription.findOne({
+      where: { user_id: user.id, meetup_id: meetup.id },
+    });
+
+    await subscription.destroy();
+
+    return res.status(200).json(subscription);
   }
 }
 
