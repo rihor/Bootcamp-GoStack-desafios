@@ -21,14 +21,11 @@ function Registrations({ isFocused }) {
       const { data } = await api.get('subscriptions');
       // filtrar os dados
       const meetupsData = data.map(({ Meetup: meetup }) => ({
+        subscribed: true,
         ...meetup,
         formattedDate: formatRelative(parseISO(meetup.date), new Date(), {
           locale: pt,
         }),
-        banner: {
-          ...meetup.banner,
-          url: meetup.banner.url.replace(/localhost/, ip),
-        },
       }));
       setMeetups(meetupsData);
       setLoading(false);
@@ -40,13 +37,11 @@ function Registrations({ isFocused }) {
     <Background>
       <Header />
       <Container>
-        {/* {loading ? null : ( */}
         <MeetupsList
           data={meetups}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => <Card meetup={item} />}
         />
-        {/* )} */}
       </Container>
     </Background>
   );

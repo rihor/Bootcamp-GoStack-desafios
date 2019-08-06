@@ -8,7 +8,7 @@ import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
 import Dashboard from '~/pages/Dashboard';
 import Profile from '~/pages/Profile';
-import Registrations from '~/pages/Registrations';
+import Subscriptions from '~/pages/Subscriptions';
 
 export default (isSigned = false) =>
   createAppContainer(
@@ -16,7 +16,7 @@ export default (isSigned = false) =>
       {
         Sign: createSwitchNavigator({ SignIn, SignUp }),
         App: createBottomTabNavigator(
-          { Dashboard, Registrations, Profile },
+          { Dashboard, Subscriptions, Profile },
           {
             tabBarOptions: {
               keyboardHidesTabBar: true,
