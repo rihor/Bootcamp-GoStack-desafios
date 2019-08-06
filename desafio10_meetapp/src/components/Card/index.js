@@ -35,7 +35,7 @@ export default function Card({ meetup }) {
         </Info>
         <StyledButton>
           {/* {registered ? 'Cancelar inscrição' : 'Realizar inscrição'} */}
-          Cancelar inscrição
+          {meetup.subscribed ? 'Cancelar inscrição' : 'Realizar inscrição'}
         </StyledButton>
       </Body>
     </Container>
@@ -44,23 +44,13 @@ export default function Card({ meetup }) {
 
 Card.propTypes = {
   meetup: PropTypes.shape({
-    title: PropTypes.string,
+    subscribed: PropTypes.bool,
+    title: PropTypes.string.isRequired,
     banner: PropTypes.shape({ url: PropTypes.string.isRequired }),
-    formattedDate: PropTypes.string,
-    location: PropTypes.string,
+    formattedDate: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
     User: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  }),
-};
-
-Card.defaultProps = {
-  meetup: PropTypes.shape({
-    title: 'sem título',
-    formattedDate: 'sem data',
-    location: 'sem local',
-    User: PropTypes.shape({
-      name: 'sem autor',
+      name: PropTypes.string.isRequired,
     }).isRequired,
-  }),
+  }).isRequired,
 };

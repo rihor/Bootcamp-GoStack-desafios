@@ -36,7 +36,9 @@ export const TextWrapper = styled.View`
   margin-top: 5px;
 `;
 
-export const StyledText = styled.Text`
+export const StyledText = styled.Text.attrs({
+  numberOfLines: 1,
+})`
   margin-left: 5px;
   font-size: 14px;
   color: #999;
