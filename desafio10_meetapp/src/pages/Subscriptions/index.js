@@ -17,34 +17,36 @@ function Subscriptions({ isFocused }) {
   const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
 
-  useEffect(() => {
-    async function loadMeetups() {
-      setLoading(true);
-      setEmpty(false);
-      const { data } = await api.get('subscriptions');
-      if (data && data.length === 0) {
-        setLoading(false);
-        setEmpty(true);
-        setMeetups([]);
-        return;
-      }
-      // filtrar os dados
-      const meetupsData = data.map(({ Meetup: meetup }) => ({
-        subscribed: true,
-        ...meetup,
-        formattedDate: formatRelative(parseISO(meetup.date), new Date(), {
-          locale: pt,
-        }),
-      }));
-      setMeetups(meetupsData);
+  async function loadMeetups() {
+    setLoading(true);
+    setEmpty(false);
+    const { data } = await api.get('subscriptions');
+    if (data && data.length === 0) {
       setLoading(false);
+      setEmpty(true);
+      setMeetups([]);
+      return;
     }
+    // filtrar os dados
+    const meetupsData = data.map(({ Meetup: meetup }) => ({
+      subscribed: true,
+      ...meetup,
+      formattedDate: formatRelative(parseISO(meetup.date), new Date(), {
+        locale: pt,
+      }),
+    }));
+    setMeetups(meetupsData);
+    setLoading(false);
+  }
+
+  useEffect(() => {
     if (isFocused) loadMeetups();
   }, [isFocused]);
 
   async function handleUnsubscribe(id) {
     try {
       await api.delete(`/meetup/${id}/unsubscribe`);
+      loadMeetups();
       Alert.alert('Sucesso', 'Você se desinscreveu com sucesso!');
     } catch (error) {
       Alert.alert('Error', 'Você não pôde se desinscrever!');
