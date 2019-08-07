@@ -10,16 +10,24 @@ import api from '~/services/api';
 import Background from '~/components/Background';
 import Card from '~/components/Card';
 import Header from '~/components/Header';
-import { Container, MeetupsList } from './styles';
+import { Container, MeetupsList, ErrorMessage, ErrorContainer } from './styles';
 
-function Registrations({ isFocused }) {
+function Subscriptions({ isFocused }) {
   const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [empty, setEmpty] = useState(false);
 
   useEffect(() => {
     async function loadMeetups() {
       setLoading(true);
+      setEmpty(false);
       const { data } = await api.get('subscriptions');
+      if (data && data.length === 0) {
+        setLoading(false);
+        setEmpty(true);
+        setMeetups([]);
+        return;
+      }
       // filtrar os dados
       const meetupsData = data.map(({ Meetup: meetup }) => ({
         subscribed: true,
@@ -46,6 +54,12 @@ function Registrations({ isFocused }) {
   return (
     <Background>
       <Header />
+      {empty && (
+        <ErrorContainer>
+          <Icon name="clear" size={80} color="rgba(255,255,255,0.4)" />
+          <ErrorMessage>Não está inscrito em nenhum meetup...</ErrorMessage>
+        </ErrorContainer>
+      )}
       {loading ? (
         <ActivityIndicator style={{ flex: 1 }} size={60} color="#fff" />
       ) : (
@@ -74,14 +88,14 @@ tabBarIcon.propTypes = {
   tintColor: PropTypes.string.isRequired,
 };
 
-Registrations.navigationOptions = {
+Subscriptions.navigationOptions = {
   tabBarLabel: 'Inscrições',
   tabBarIcon,
 };
 
-Registrations.propTypes = {
+Subscriptions.propTypes = {
   isFocused: PropTypes.bool.isRequired,
 };
 
 // recebe props de react-navigation, permite escutar o foco
-export default withNavigationFocus(Registrations);
+export default withNavigationFocus(Subscriptions);
