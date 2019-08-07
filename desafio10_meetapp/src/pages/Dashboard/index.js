@@ -19,42 +19,53 @@ function Dashboard({ isFocused }) {
   const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function loadMeetups() {
-      setLoading(true);
-      const { data } = await api.get('meetup', {
-        params: { date: format(date, 'yyyy-MM-dd'), page },
-      });
-      if (!data) {
-        setLoading(false);
-        return;
-      }
-      const formattedMeetups = data.map(meetup => ({
-        ...meetup,
-        formattedDate: formatRelative(parseISO(meetup.date), new Date(), {
-          locale: pt,
-        }),
-      }));
+  async function loadMeetups(pageToLoad = 1) {
+    const { data } = await api.get('meetup', {
+      params: { date: format(date, 'yyyy-MM-dd'), page: pageToLoad },
+    });
+    // se não receber nada da API, sai da função
+    if (!data) {
+      return;
+    }
+    const formattedMeetups = data.map(meetup => ({
+      ...meetup,
+      formattedDate: formatRelative(parseISO(meetup.date), new Date(), {
+        locale: pt,
+      }),
+    }));
 
-      if (page > 1) {
-        setMeetups([...meetups, ...formattedMeetups]);
-      } else {
-        setMeetups(formattedMeetups);
+    setPage(formattedMeetups.length >= 1 ? pageToLoad : pageToLoad - 1);
+    setMeetups(
+      pageToLoad >= 2 ? [...meetups, ...formattedMeetups] : formattedMeetups
+    );
+  }
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      if (isFocused) {
+        await loadMeetups();
       }
       setLoading(false);
     }
-    loadMeetups();
+    load();
     // eslint-disable-next-line
-  }, [isFocused, page, date]);
+  }, [isFocused, date]);
 
-  function handleNextPage() {}
+  async function handleNextPage() {
+    await loadMeetups(page + 1);
+  }
 
   async function handleSubscribe(id) {
     try {
-      await api.post(`/meetup/${id}/subscribe`);
-      Alert.alert('Sucesso', 'Inscrição feita com sucesso!');
-    } catch (error) {
-      Alert.alert('Error', 'Inscrição não pode ser feita!');
+      const { data } = await api.post(`/meetup/${id}/subscribe`);
+      if (data.error) {
+        Alert.alert('Error', data.error);
+      } else {
+        Alert.alert('Sucesso', 'Inscrição feita com sucesso!');
+      }
+    } catch (err) {
+      Alert.alert('Error', 'Ocorreu um erro inesperado.');
     }
   }
 
@@ -69,6 +80,7 @@ function Dashboard({ isFocused }) {
           <MeetupsList
             data={meetups}
             keyExtractor={item => String(item.id)}
+            onEndReachedThreshold={0.01}
             onEndReached={handleNextPage}
             renderItem={({ item }) => (
               <Card
