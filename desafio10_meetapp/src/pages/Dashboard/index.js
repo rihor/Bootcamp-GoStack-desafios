@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Alert, ActivityIndicator } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import { format, formatRelative, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
-import api, { ip } from '~/services/api';
+import api from '~/services/api';
 import Header from '~/components/Header';
 import Background from '~/components/Background';
 import DatePicker from '~/components/DateInput';
@@ -48,18 +49,36 @@ function Dashboard({ isFocused }) {
 
   function handleNextPage() {}
 
+  async function handleSubscribe(id) {
+    try {
+      await api.post(`/meetup/${id}/subscribe`);
+      Alert.alert('Sucesso', 'Inscrição feita com sucesso!');
+    } catch (error) {
+      Alert.alert('Error', 'Inscrição não pode ser feita!');
+    }
+  }
+
   return (
     <Background>
       <Header />
-      <Container>
-        <DatePicker date={date} onChange={setDate} />
-        <MeetupsList
-          data={meetups}
-          keyExtractor={item => String(item.id)}
-          onEndReached={handleNextPage}
-          renderItem={({ item }) => <Card meetup={item} />}
-        />
-      </Container>
+      {loading ? (
+        <ActivityIndicator style={{ flex: 1 }} size={60} color="#fff" />
+      ) : (
+        <Container>
+          <DatePicker date={date} onChange={setDate} />
+          <MeetupsList
+            data={meetups}
+            keyExtractor={item => String(item.id)}
+            onEndReached={handleNextPage}
+            renderItem={({ item }) => (
+              <Card
+                meetup={item}
+                buttonAction={() => handleSubscribe(item.id)}
+              />
+            )}
+          />
+        </Container>
+      )}
     </Background>
   );
 }

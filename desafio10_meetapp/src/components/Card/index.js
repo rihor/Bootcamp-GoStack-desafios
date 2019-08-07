@@ -13,7 +13,7 @@ import {
   TextWrapper,
 } from './styles';
 
-export default function Card({ meetup }) {
+export default function Card({ meetup, buttonAction }) {
   return (
     <Container>
       <Banner source={{ uri: meetup.banner.url }} />
@@ -33,8 +33,7 @@ export default function Card({ meetup }) {
             <StyledText>Organizador: {meetup.User.name}</StyledText>
           </TextWrapper>
         </Info>
-        <StyledButton>
-          {/* {registered ? 'Cancelar inscrição' : 'Realizar inscrição'} */}
+        <StyledButton onPress={buttonAction}>
           {meetup.subscribed ? 'Cancelar inscrição' : 'Realizar inscrição'}
         </StyledButton>
       </Body>
@@ -53,4 +52,5 @@ Card.propTypes = {
       name: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  buttonAction: PropTypes.func.isRequired,
 };

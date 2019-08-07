@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Alert, ActivityIndicator } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import { parseISO, formatRelative } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
-import api, { ip } from '~/services/api';
+import api from '~/services/api';
 import Background from '~/components/Background';
 import Card from '~/components/Card';
 import Header from '~/components/Header';
@@ -33,16 +34,34 @@ function Registrations({ isFocused }) {
     loadMeetups();
   }, [isFocused]);
 
+  async function handleUnsubscribe(id) {
+    try {
+      await api.delete(`/meetup/${id}/unsubscribe`);
+      Alert.alert('Sucesso', 'Você se desinscreveu com sucesso!');
+    } catch (error) {
+      Alert.alert('Error', 'Você não pôde se desinscrever!');
+    }
+  }
+
   return (
     <Background>
       <Header />
-      <Container>
-        <MeetupsList
-          data={meetups}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => <Card meetup={item} />}
-        />
-      </Container>
+      {loading ? (
+        <ActivityIndicator style={{ flex: 1 }} size={60} color="#fff" />
+      ) : (
+        <Container>
+          <MeetupsList
+            data={meetups}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <Card
+                meetup={item}
+                buttonAction={() => handleUnsubscribe(item.id)}
+              />
+            )}
+          />
+        </Container>
+      )}
     </Background>
   );
 }
