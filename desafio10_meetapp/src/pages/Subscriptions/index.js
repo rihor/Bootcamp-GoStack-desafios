@@ -31,7 +31,7 @@ function Registrations({ isFocused }) {
       setMeetups(meetupsData);
       setLoading(false);
     }
-    loadMeetups();
+    if (isFocused) loadMeetups();
   }, [isFocused]);
 
   async function handleUnsubscribe(id) {
