@@ -38,21 +38,6 @@ describe('Session', () => {
     expect(response.status).toBe(401);
   });
 
-  it('should not pass validation', async () => {
-    const user = await factory.attrs('User');
-
-    await request(app)
-      .post('/users')
-      .send(user);
-
-    // tentar login com uma senha invalida
-    const response = await request(app)
-      .post('/sessions')
-      .send({ ...user, email: '0' });
-
-    expect(response.status).toBe(400);
-  });
-
   it('should not login, because email not found', async () => {
     const user = await factory.attrs('User');
 
@@ -66,5 +51,20 @@ describe('Session', () => {
       .send({ ...user, email: 'umt3st3@t3st3.com' });
 
     expect(response.status).toBe(401);
+  });
+
+  it('should not pass login validation', async () => {
+    const user = await factory.attrs('User');
+
+    await request(app)
+      .post('/users')
+      .send(user);
+
+    // tentar login com uma senha invalida
+    const response = await request(app)
+      .post('/sessions')
+      .send({ ...user, email: '0' });
+
+    expect(response.status).toBe(400);
   });
 });
