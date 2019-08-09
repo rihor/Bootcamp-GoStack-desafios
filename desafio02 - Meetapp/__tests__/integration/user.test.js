@@ -58,4 +58,116 @@ describe('User', () => {
 
     expect(response.status).toBe(400);
   });
+
+  it('should update user name, email and password', async () => {
+    const user = await factory.attrs('User');
+
+    // cadastro
+    await request(app)
+      .post('/users')
+      .send({ ...user, password: '123456' });
+
+    // login
+    const loginResponse = await request(app)
+      .post('/sessions')
+      .send({ ...user, password: '123456' });
+
+    user.token = loginResponse.body.token;
+
+    const updateUserResponse = await request(app)
+      .put('/users')
+      .send({
+        name: 'New Name',
+        email: 'teste@nottaken.com',
+        oldPassword: '123456',
+        password: '123123',
+        confirmPassword: '123123',
+      })
+      .set('Authorization', `bearer ${user.token}`);
+
+    expect(updateUserResponse.body).toHaveProperty('id');
+  });
+
+  it("shouldn't update user password, the password doesn't match the user password", async () => {
+    const user = await factory.attrs('User');
+
+    // cadastro
+    await request(app)
+      .post('/users')
+      .send({ ...user, password: '123456' });
+
+    // login
+    const loginResponse = await request(app)
+      .post('/sessions')
+      .send({ ...user, password: '123456' });
+
+    user.token = loginResponse.body.token;
+
+    const updateUserResponse = await request(app)
+      .put('/users')
+      .send({
+        oldPassword: 'different',
+        password: '123123',
+        confirmPassword: '123123',
+      })
+      .set('Authorization', `bearer ${user.token}`);
+
+    expect(updateUserResponse.status).toBe(401);
+  });
+
+  it("shouldn't update user email, email already in use", async () => {
+    const user = await factory.attrs('User');
+
+    // cadastro do usuário A
+    await request(app)
+      .post('/users')
+      .send({ ...user, password: '123456' });
+
+    // cadastro de um usuário B com o email que o usuário A vai tentar pegar
+    await request(app)
+      .post('/users')
+      .send({ ...user, email: 'email@taken.com' });
+
+    // login do usuário A
+    const loginResponse = await request(app)
+      .post('/sessions')
+      .send({ ...user, password: '123456' });
+
+    user.token = loginResponse.body.token;
+
+    const updateUserResponse = await request(app)
+      .put('/users')
+      .send({
+        email: 'email@taken.com',
+      })
+      .set('Authorization', `bearer ${user.token}`);
+
+    expect(updateUserResponse.status).toBe(400);
+  });
+
+  it("shouldn't pass update user validation, because it didn't provide a confirmation password", async () => {
+    const user = await factory.attrs('User');
+
+    // cadastro
+    await request(app)
+      .post('/users')
+      .send({ ...user, password: '123456' });
+
+    // login
+    const loginResponse = await request(app)
+      .post('/sessions')
+      .send({ ...user, password: '123456' });
+
+    user.token = loginResponse.body.token;
+
+    const updateUserResponse = await request(app)
+      .put('/users')
+      .send({
+        oldPassword: '123456',
+        password: 'newPassword',
+      })
+      .set('Authorization', `bearer ${user.token}`);
+
+    expect(updateUserResponse.status).toBe(400);
+  });
 });
