@@ -53,7 +53,7 @@ class SubscriptionController {
     // checa se o dono do meetup é quem está tentando se inscrever
     if (meetup.user_id === req.userId) {
       return res
-        .status(200)
+        .status(400)
         .json({ error: "You can't subscribe to your own meetup" });
     }
 
@@ -78,13 +78,13 @@ class SubscriptionController {
       String(checkIfDateIsTaken.meetup_id) === meetupId
     ) {
       return res
-        .status(200)
+        .status(400)
         .json({ error: 'You are already subscribed to this meetup' });
     }
 
     // checa se o usuário já tem uma meetup marcada para esse horário
     if (checkIfDateIsTaken) {
-      return res.status(200).json({
+      return res.status(400).json({
         error: 'You can not subscribe to two meetups at the same time',
       });
     }
