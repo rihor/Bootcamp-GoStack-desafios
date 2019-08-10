@@ -86,10 +86,12 @@ class MeetupController {
 
   async update(req, res) {
     const { meetupId } = req.params;
+    const { banner_id } = req.body;
+
     // schema de validação
     const schema = Yup.object().shape({
       title: Yup.string(),
-      file_id: Yup.number(),
+      banner_id: Yup.number(),
       description: Yup.string(),
       location: Yup.string(),
       date: Yup.date(),
@@ -107,12 +109,15 @@ class MeetupController {
       return res.status(400).json({ error: 'Meetup not found' });
     }
 
-    // checa se o banner existe no banco
-    const banner = await File.findByPk(req.body.banner_id);
+    // caso um novo banner tenha sido mandado
+    if (banner_id || typeof banner_id === 'number') {
+      // checa se o banner existe no banco
+      const banner = await File.findByPk(banner_id);
 
-    // caso o banner não exista retorna o erro
-    if (banner === null) {
-      return res.status(400).json({ error: 'This banner does not exist' });
+      // caso o banner não exista retorna o erro
+      if (banner === null) {
+        return res.status(400).json({ error: 'This banner does not exist' });
+      }
     }
 
     // checar esse é o dono da meetup
