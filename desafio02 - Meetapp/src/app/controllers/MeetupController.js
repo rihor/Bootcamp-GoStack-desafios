@@ -41,14 +41,6 @@ class MeetupController {
 
   async find(req, res) {
     const { meetupId } = req.params;
-    // schema de validação
-    const schema = Yup.object().shape({
-      id: Yup.number().required(),
-    });
-    // checagem pela schema
-    if (!schema.isValid(req.params)) {
-      return res.status(400).json({ error: 'Validation fails' });
-    }
 
     const meetup = await Meetup.findByPk(meetupId, {
       include: [
