@@ -16,9 +16,7 @@ async function fetchUserAuthorization() {
     .post('/sessions')
     .send(user);
 
-  user.token = loginResponse.body.token;
-
-  return user.token;
+  return loginResponse.body.token;
 }
 
 export default fetchUserAuthorization;
