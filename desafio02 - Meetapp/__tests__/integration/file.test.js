@@ -1,10 +1,6 @@
-import request from 'supertest';
-import { format } from 'date-fns';
-import { resolve } from 'path';
-
-import app from '../../src/app';
 import truncate from '../util/truncate';
 import fetchUserAuthorization from '../fetchUserAuthorization';
+import uploadFile from '../uploadFile';
 
 describe('File', () => {
   beforeEach(async () => {
@@ -14,11 +10,8 @@ describe('File', () => {
   it('should upload a file', async () => {
     const token = await fetchUserAuthorization();
 
-    const response = await request(app)
-      .post('/files')
-      .attach('file', resolve(__dirname, '..', 'assets', 'wack.png'))
-      .set('Authorization', `bearer ${token}`);
+    const responseBody = await uploadFile(token);
 
-    expect(response.body).toHaveProperty('url');
+    expect(responseBody).toHaveProperty('url');
   });
 });
