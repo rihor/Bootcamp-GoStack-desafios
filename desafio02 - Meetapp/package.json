@@ -5,7 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "queue": "nodemon src/queue.js"
+    "queue": "nodemon src/queue.js",
+    "pretest": "set NODE_ENV=test && sequelize db:migrate",
+    "test": "set NODE_ENV=test && jest --runInBand",
+    "posttest": "set NODE_ENV=test && sequelize db:migrate:undo:all"
   },
   "dependencies": {
     "@sentry/node": "^5.4.0",
@@ -29,14 +32,21 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
+    "@sucrase/jest-plugin": "^2.0.0",
+    "@types/jest": "^24.0.17",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-prettier": "^3.1.0",
+    "factory-girl": "^5.0.4",
+    "faker": "^4.1.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.17.1",
     "sequelize-cli": "^5.5.0",
-    "sucrase": "^3.10.1"
+    "sqlite3": "^4.0.9",
+    "sucrase": "^3.10.1",
+    "supertest": "^4.0.2"
   }
 }
