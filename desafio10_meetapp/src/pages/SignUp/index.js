@@ -54,6 +54,7 @@ export default function SignUp({ navigation }) {
             keyboardType="email-address"
             autoCorrect={false}
             returnKeyType="next"
+            ref={emailRef}
             onSubmitEditing={() => {
               passwordRef.current.focus();
             }}
