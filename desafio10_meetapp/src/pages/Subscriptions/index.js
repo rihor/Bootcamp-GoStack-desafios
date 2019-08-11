@@ -44,12 +44,16 @@ function Subscriptions({ isFocused }) {
   }, [isFocused]);
 
   async function handleUnsubscribe(id) {
-    try {
-      await api.delete(`/meetup/${id}/unsubscribe`);
+    const response = await api
+      .delete(`/meetup/${id}/unsubscribe`)
+      .catch(err => {
+        if (err.response && err.response.data) {
+          Alert.alert('Error', err.response.data.error);
+        }
+      });
+    if (response.status === 200) {
       loadMeetups();
       Alert.alert('Sucesso', 'Você se desinscreveu com sucesso!');
-    } catch (error) {
-      Alert.alert('Error', 'Você não pôde se desinscrever!');
     }
   }
 
