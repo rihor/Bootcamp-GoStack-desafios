@@ -71,15 +71,13 @@ function Dashboard({ isFocused }) {
   }
 
   async function handleSubscribe(id) {
-    try {
-      const { data } = await api.post(`/meetup/${id}/subscribe`);
-      if (data.error) {
-        Alert.alert('Error', data.error);
-      } else {
-        Alert.alert('Sucesso', 'Inscrição feita com sucesso!');
+    const response = await api.post(`/meetup/${id}/subscribe`).catch(err => {
+      if (err.response && err.response.data) {
+        Alert.alert('Error', err.response.data.error);
       }
-    } catch (err) {
-      Alert.alert('Error', 'Ocorreu um erro inesperado.');
+    });
+    if (response.status === 200) {
+      Alert.alert('Sucesso', 'Inscrição feita com sucesso!');
     }
   }
 
